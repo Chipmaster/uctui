@@ -1,6 +1,6 @@
 # This file is part of uctui.
 
-# Foobar is free software: you can redistribute it and/or modify
+# uctui is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -20,7 +20,7 @@ from optparse import OptionParser
 
 usage="%prog [-g]"
 
-def readOpts():
+def read_opts():
     parser = OptionParser(usage=usage, version=version.version)
     parser.add_option("-g", "--gtk", action="store_true", 
                       dest="gui", default=False, help="run gtk interface")
