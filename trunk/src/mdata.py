@@ -17,6 +17,15 @@ import sys
 
 import mutagen
 
+class NotAMusicFile(Exception):
+    """The file tried to open is not a music file."""
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        pass
+
 
 class MData:
     """ A place to store all of the metadata for a given file.
@@ -28,7 +37,9 @@ class MData:
 
     def __init__(self, filename):
         meta = mutagen.File(filename, easy=True)
-        if meta is not None:
+        if meta is None:
+            raise NotAMusicFile
+        else:
             self.mbtrack = meta.tags['musicbrainz_trackid']
             self.mbalbum = meta.tags['musicbrainz_albumid']
             self.mbartist = meta.tags['musicbrainz_artistid']
@@ -47,5 +58,4 @@ class MData:
 
 if __name__ == "__main__" :
     metadata = MData(sys.argv[1])
-    if metadata is not None:
-        print metadata.pprint()
+    print metadata.pprint()
