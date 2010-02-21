@@ -1,7 +1,11 @@
 # available settings
 
 collection_directory
+
 username
+
 password
+
 server_host
+
 server_port
