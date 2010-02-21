@@ -1,4 +1,4 @@
-# available settings
+#summary available settings
 
 collection_directory
 
