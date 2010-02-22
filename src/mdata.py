@@ -57,5 +57,8 @@ class MData:
 
 
 if __name__ == "__main__" :
-    metadata = MData(sys.argv[1])
-    print metadata.pprint()
+    try:
+        metadata = MData(sys.argv[1])
+        metadata.pprint()
+    except:
+        pass
