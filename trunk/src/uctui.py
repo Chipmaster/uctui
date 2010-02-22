@@ -16,9 +16,27 @@
 # along with uctui.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
 import opts
 import uctgui
 import settings
+import mdata
+import web
+from sets import Set
+
+def gather_collection(directory):
+    music = []
+    for root, dirs, files in os.walk(directory):
+        for name in files:
+            try:
+                print "Parsing: ", os.path.join(root,name)
+                f = mdata.MData(os.path.join(root,name))
+                music.append(f)
+            except: #mdata.NotAMusicFile:
+                pass
+    return music
+
 
 if __name__ == '__main__':
     (options, args) = opts.read_opts()
@@ -33,4 +51,16 @@ if __name__ == '__main__':
     if options.gui:
         uctgui.PyApp()
         uctgui.gtk.main()
+
+    files = gather_collection(settings['collection_directory'])
+    
+    uuids = Set()
+    for f in files:
+        uuids.add(f.mbalbum[0])
+    
+    print "Uploading..."
+    submit = web.UserCollection()
+    submit.add_releases(uuids)
+
+
 
