@@ -60,5 +60,5 @@ if __name__ == "__main__" :
     try:
         metadata = MData(sys.argv[1])
         metadata.pprint()
-    except:
+    except NotAMusicFile:
         pass
