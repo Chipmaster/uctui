@@ -19,6 +19,13 @@ settings_file = "~/.config/MusicBrainz/uctui.conf"
 
 
 class Settings:
+    """
+    Abstracts away the process of saving and loading configurations.
+    Current method creates a file from a dictionary with format:
+    key=value
+    """
+
+
     def __init__(self):
         self.file = os.path.expanduser(settings_file)
         d = os.path.dirname(self.file)
@@ -31,7 +38,9 @@ class Settings:
 
 
     def store_settings(self, settings):
-        # Overwrites the save file with dictionary full of settings
+        """
+        Overwrites the save file with dictionary full of settings
+        """
         try:
             f = open(self.file, 'w')
             try:
@@ -47,8 +56,10 @@ class Settings:
 
 
     def get_settings(self):
-        # Retrieve settings from settings file and store in a dictionary.
-        # Returns an empty dictionary if the file does not exist or is empty.
+        """
+        Retrieve settings from settings file and store in a dictionary.
+        Returns an empty dictionary if the file does not exist or is empty.
+        """
         settings = {}
         try:
             f = open(self.file, 'r')

@@ -22,20 +22,32 @@ import opts
 import uctgui
 import settings
 import mdata
+import save
 import web
 from sets import Set
 
-def gather_collection(directory):
-    music = []
+def gather_collection(directory, file_dic):
+    """
+    Builds a dictionary with form:
+    
+    Path-->(mtime, mdata)
+    """
     for root, dirs, files in os.walk(directory):
         for name in files:
             try:
-                print "Parsing: ", os.path.join(root,name)
-                f = mdata.MData(os.path.join(root,name))
-                music.append(f)
-            except: #mdata.NotAMusicFile:
+                entry = os.path.join(root,name)
+                print "Parsing: ", entry
+                if not entry in file_dic:
+                    #New file
+                    f = mdata.MData(entry)
+                    file_dic[entry] = (os.path.getmtime(entry),f)
+                elif not file_dic[entry][0] == os.path.getmtime(entry):
+                    #file has been modified since last check
+                    f = mdata.MData(entry)
+                    file_dic[entry] = (os.path.getmtime(entry),f)
+            except: #mdata.NotAMusicFile
                 pass
-    return music
+    return file_dic
 
 
 if __name__ == '__main__':
@@ -52,15 +64,17 @@ if __name__ == '__main__':
         uctgui.PyApp()
         uctgui.gtk.main()
 
-    files = gather_collection(settings['collection_directory'])
+    state = save.State()
+    file_dic = state.get_state()
+
+    file_dic = gather_collection(settings['collection_directory'], file_dic)
     
     uuids = Set()
-    for f in files:
-        uuids.add(f.mbalbum[0])
+    for f in file_dic:
+        uuids.add(file_dic[f][1].mbalbum[0])
     
-    print "Uploading..."
     submit = web.UserCollection()
     submit.add_releases(uuids)
 
-
+    state.save_state(file_dic)
 
