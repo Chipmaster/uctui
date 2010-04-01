@@ -60,21 +60,23 @@ if __name__ == '__main__':
         print options.gui
         print set.first_run()
 
-    if options.gui:
-        uctgui.PyApp()
-        uctgui.gtk.main()
-
+    
     state = save.State()
     file_dic = state.get_state()
 
-    file_dic = gather_collection(settings['collection_directory'], file_dic)
+    if options.gui:
+        uctgui.PyApp()
+        uctgui.gtk.main()
+    else:
+        file_dic = gather_collection(settings['collection_directory'], file_dic)
     
-    uuids = Set()
-    for f in file_dic:
-        uuids.add(file_dic[f][1].mbalbum[0])
+        uuids = Set()
+        for f in file_dic:
+            uuids.add(file_dic[f][1].mbalbum[0])
     
-    submit = web.UserCollection()
-    submit.add_releases(uuids)
+        submit = web.UserCollection()
+        submit.add_releases(uuids)
+
 
     state.save_state(file_dic)
 
