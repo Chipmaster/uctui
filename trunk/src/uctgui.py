@@ -25,12 +25,29 @@ class PyApp(gtk.Window):
         self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
         self.set_position(gtk.WIN_POS_CENTER)
 
+        menubar = self._createMenu()
+
+
+        notebook = self._createNotebook()
+
+
+        vbox = gtk.VBox(False, 2)
+        vbox.pack_start(menubar, False, False, 0)
+        vbox.pack_start(notebook, False, False, 0)
+
+        self.add(vbox)
+
+        self.connect("destroy", gtk.main_quit)
+        self.show_all()
+
+    def _createMenu(self):
         mb = gtk.MenuBar()
 
+        #File menu
         filemenu = gtk.Menu()
         filem = gtk.MenuItem("_File")
         filem.set_submenu(filemenu)
-       
+
         agr = gtk.AccelGroup()
         self.add_accel_group(agr)
 
@@ -43,9 +60,8 @@ class PyApp(gtk.Window):
         
         filemenu.append(exit)
 
-        mb.append(filem)
 
-        
+        #Options menu
         optionsmenu = gtk.Menu()
         optionsm = gtk.MenuItem("_Options")
         optionsm.set_submenu(optionsmenu)
@@ -53,9 +69,8 @@ class PyApp(gtk.Window):
         propertiesi = gtk.ImageMenuItem(gtk.STOCK_PROPERTIES, agr)
         optionsmenu.append(propertiesi)
 
-        mb.append(optionsm)
 
-        
+        #Help menu
         helpmenu = gtk.Menu()
         helpm = gtk.MenuItem("_Help")
         helpm.set_submenu(helpmenu)
@@ -63,13 +78,37 @@ class PyApp(gtk.Window):
         abouti = gtk.ImageMenuItem(gtk.STOCK_ABOUT, agr)
         helpmenu.append(abouti)
 
+
+        #Add menus to menubar
+        mb.append(filem)
+        mb.append(optionsm)
         mb.append(helpm)
+
+        return mb
+
+    def _createNotebook(self):
+        notebook = gtk.Notebook()
+        notebook.set_tab_pos(gtk.POS_TOP)
         
+        for i in ["Test", "Update"]:
+            tframe = i;
 
-        vbox = gtk.VBox(False, 2)
-        vbox.pack_start(mb, False, False, 0)
+            frame = gtk.Frame(tframe)
+            frame.set_border_width(10)
+            frame.set_size_request(100, 300)
+            frame.show()
 
-        self.add(vbox)
+            label = gtk.Label(tframe)
+            frame.add(label)
+            label.show()
 
-        self.connect("destroy", gtk.main_quit)
-        self.show_all()
+            label = gtk.Label(tframe)
+            notebook.append_page(frame, label)
+
+        return notebook
+
+
+
+if __name__ == "__main__":
+    PyApp()
+
