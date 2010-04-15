@@ -23,7 +23,7 @@ class PyApp(gtk.Window):
     def __init__(self):
         super(PyApp, self).__init__()
         
-	self.settings = settings.Settings().get_settings()
+        self.settings = settings.Settings().get_settings()
 
         self.set_title("uctui")
         #self.set_size_request(800, 600)
@@ -130,7 +130,15 @@ class PyApp(gtk.Window):
 
         button.connect("clicked", self._update, mde.get_text())
 
+        usre.connect("changed", self._save, 'username')
+        psse.connect("changed", self._save, 'password')
+        mde.connect("changed", self._save, 'collection_directory')
+
         return update	
+
+    def _save(self, object, key):
+        self.settings[key] = object.get_text()
+        settings.Settings().store_settings(self.settings)
 
     def _update(self, object, music_dir):
         update.update(music_dir)
