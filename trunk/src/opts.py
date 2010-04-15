@@ -23,7 +23,10 @@ usage="%prog [-g]"
 def read_opts():
     parser = OptionParser(usage=usage, version=version.version)
     parser.add_option("-g", "--gtk", action="store_true", 
-                      dest="gui", default=False, help="run gtk interface")
+                      dest="gui", default=True, help="run gtk interface")
+
+    parser.add_option("-b", "--batch", action="store_false",
+                      dest="gui", default=True, help="run in cli batch mode")
 
 #Last option
     parser.add_option("-D", "--debug", action="store_true",
