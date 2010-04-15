@@ -15,21 +15,23 @@
 
 import gtk
 
+import settings
+
 class PyApp(gtk.Window):
 
     def __init__(self):
         super(PyApp, self).__init__()
+        
+	self.settings = settings.Settings().get_settings()
 
         self.set_title("uctui")
-        self.set_size_request(250, 200)
+        #self.set_size_request(800, 600)
         self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
         self.set_position(gtk.WIN_POS_CENTER)
 
         menubar = self._createMenu()
 
-
         notebook = self._createNotebook()
-
 
         vbox = gtk.VBox(False, 2)
         vbox.pack_start(menubar, False, False, 0)
@@ -89,26 +91,44 @@ class PyApp(gtk.Window):
     def _createNotebook(self):
         notebook = gtk.Notebook()
         notebook.set_tab_pos(gtk.POS_TOP)
-        
-        for i in ["Test", "Update"]:
-            tframe = i;
-
-            frame = gtk.Frame(tframe)
-            frame.set_border_width(10)
-            frame.set_size_request(100, 300)
-            frame.show()
-
-            label = gtk.Label(tframe)
-            frame.add(label)
-            label.show()
-
-            label = gtk.Label(tframe)
-            notebook.append_page(frame, label)
+        update = self._updateTab()
+        notebook.append_page(update, gtk.Label("Update"))
 
         return notebook
 
+    def _updateTab(self):
+        button = gtk.Button("Update")
+        update = gtk.VBox(False, 15)
+        info = gtk.Table(3,2)
+        usr = gtk.Label("Username:")
+        pss = gtk.Label("Password:")
+        md = gtk.Label("Music Directory:")
 
+        usre = gtk.Entry()
+        usre.set_text(self.settings['username'])
+        psse = gtk.Entry()
+        psse.set_visibility(False)
+        psse.set_text(self.settings['password'])
+        mde = gtk.Entry()
+        mde.set_text(self.settings['collection_directory'])
+        
+
+        dialog = gtk.FileChooserDialog("Music Directory..",
+                action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+
+
+        info.attach(usr,0,1,0,1)
+        info.attach(pss,0,1,1,2)
+        info.attach(md,0,1,2,3)
+        info.attach(usre,1,2,0,1)
+        info.attach(psse,1,2,1,2)
+        info.attach(mde,1,2,2,3)
+
+        update.pack_start(info, False, False, 10)
+        update.pack_end(button, False, False, 10)
+        return update
 
 if __name__ == "__main__":
     PyApp()
+    gtk.main()
 
