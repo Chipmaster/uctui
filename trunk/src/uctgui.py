@@ -23,7 +23,6 @@ class PyApp(gtk.Window):
     def __init__(self):
         super(PyApp, self).__init__()
         
-        self.x = settings.Settings()
         self.settings = settings.Settings()
         self.s = self.settings.get_settings()
 
