@@ -35,14 +35,14 @@ class State:
         if not os.path.exists(self.file):
             return {}
         f = open(self.file, 'r')
-        print "Loading State..."
+        print "Loading state..."
         file_dic = pickle.load(f)
         f.close()
         return file_dic
 
     def save_state(self, file_dic):
         f = open(self.file, 'w')
-        print "Saving State..."
+        print "Saving state..."
         pickle.dump(file_dic, f)
         f.close()
         return

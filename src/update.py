@@ -24,11 +24,11 @@ def gather_collection(directory, file_dic):
     
     Path-->(mtime, mdata)
     """
+    print "Checking for updated files..."
     for root, dirs, files in os.walk(directory):
         for name in files:
             try:
                 entry = os.path.join(root,name)
-                print "Parsing: ", entry
                 if not entry in file_dic:
                     #New file
                     f = mdata.MData(entry)

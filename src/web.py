@@ -56,7 +56,7 @@ class UserCollection:
     def add_releases(self, releases):
         w = self._get_webservice()
         release_string = self._make_add(releases)
-        print "Adding Releases..."
+        print "Adding releases..."
         result = w.post('collection', '', release_string)
         parser = MbXmlParser()
         return parser.parse(result)
@@ -65,7 +65,7 @@ class UserCollection:
     def remove_releases(self, releases):
         w = self._get_webservice()
         release_string = self._make_remove(releases)
-        print "Removing Releases..."
+        print "Removing releases..."
         result = w.post('collection', '', release_string)
         parser = MbXmlParser()
         return parser.parse(result)

@@ -14,9 +14,13 @@
 # along with uctui.  If not, see <http://www.gnu.org/licenses/>.
 
 import gtk
+import gobject
+import time
+import threading
 
 import settings
 import update
+import repeat
 
 class PyApp(gtk.Window):
 
@@ -35,9 +39,12 @@ class PyApp(gtk.Window):
 
         notebook = self._createNotebook()
 
+        progress = self._createprogress()
+
         vbox = gtk.VBox(False, 2)
         vbox.pack_start(menubar, False, False, 0)
         vbox.pack_start(notebook, False, False, 0)
+        vbox.pack_start(progress, False, False, 0)
 
         self.add(vbox)
 
@@ -141,10 +148,40 @@ class PyApp(gtk.Window):
         self.s[key] = object.get_text()
         self.settings.store_settings(self.s)
 
-    def _update(self, object, music_dir):
+    def _update_thread(self, music_dir):
         update.update(music_dir)
+        
+    def _update_progress(self):
+        """
+        Triggered every 100ms, we sleep for 90ms allowing our work thread to run 90% of the time
+        Stops by returning false when the work thread ends
+
+        """        
+        time.sleep(.09)
+        alive = self.thread.isAlive()
+        if alive:
+            self.pb.set_text("Updating..")
+            self.pb.pulse()
+        else:
+            self.pb.set_text("Idle")
+            self.pb.set_fraction(0.0)
+        return alive
+
+    def _update(self, object, music_dir):
+        self.thread = threading.Thread(target=self._update_thread, args=(music_dir,))
+        self.thread.start()
+       
+        self.timer = gobject.timeout_add (100, self._update_progress)
+
+
+    def _createprogress(self):
+        self.pb = gtk.ProgressBar()
+        self.pb.set_text("Idle")
+        prog = gtk.VBox(False, 15)
+        prog.pack_end(self.pb, False, False, 10)
+        return prog
+
 
 if __name__ == "__main__":
     PyApp()
     gtk.main()
-
