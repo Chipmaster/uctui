@@ -16,6 +16,7 @@
 import gtk
 
 import settings
+import update
 
 class PyApp(gtk.Window):
 
@@ -126,7 +127,13 @@ class PyApp(gtk.Window):
 
         update.pack_start(info, False, False, 10)
         update.pack_end(button, False, False, 10)
-        return update
+
+        button.connect("clicked", self._update, mde.get_text())
+
+        return update	
+
+    def _update(self, object, music_dir):
+        update.update(music_dir)
 
 if __name__ == "__main__":
     PyApp()
