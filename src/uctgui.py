@@ -23,7 +23,9 @@ class PyApp(gtk.Window):
     def __init__(self):
         super(PyApp, self).__init__()
         
-        self.settings = settings.Settings().get_settings()
+        self.x = settings.Settings()
+        self.settings = settings.Settings()
+        self.s = self.settings.get_settings()
 
         self.set_title("uctui")
         #self.set_size_request(800, 600)
@@ -106,12 +108,12 @@ class PyApp(gtk.Window):
         md = gtk.Label("Music Directory:")
 
         usre = gtk.Entry()
-        usre.set_text(self.settings['username'])
+        usre.set_text(self.s['username'])
         psse = gtk.Entry()
         psse.set_visibility(False)
-        psse.set_text(self.settings['password'])
+        psse.set_text(self.s['password'])
         mde = gtk.Entry()
-        mde.set_text(self.settings['collection_directory'])
+        mde.set_text(self.s['collection_directory'])
         
 
         dialog = gtk.FileChooserDialog("Music Directory..",
@@ -137,8 +139,8 @@ class PyApp(gtk.Window):
         return update	
 
     def _save(self, object, key):
-        self.settings[key] = object.get_text()
-        settings.Settings().store_settings(self.settings)
+        self.s[key] = object.get_text()
+        self.settings.store_settings(self.s)
 
     def _update(self, object, music_dir):
         update.update(music_dir)

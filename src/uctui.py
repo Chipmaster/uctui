@@ -28,9 +28,6 @@ import web
 if __name__ == '__main__':
     (options, args) = opts.read_opts()
 
-    set = settings.Settings()
-    settings = set.get_settings()
-
     if options.debug:
         print options.gui
         print set.first_run()
@@ -39,5 +36,5 @@ if __name__ == '__main__':
         uctgui.PyApp()
         uctgui.gtk.main()
     else:
-        update.update(settings['collection_directory'])
+        update.update(settings.Settings().get_settings()['collection_directory'])
 
