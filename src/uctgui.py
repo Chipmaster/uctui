@@ -20,7 +20,6 @@ import threading
 
 import settings
 import update
-import repeat
 
 class PyApp(gtk.Window):
 
