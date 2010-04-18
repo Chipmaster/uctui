@@ -32,7 +32,7 @@ class UserCollection:
         x = s.get_settings()
         if not x:
             pass #implement no settings handling here
-        return ws.WebService(username=x['username'], password=x['password'])
+        return ws.WebService(username=x['username'].lower(), password=x['password'])
 
 
     def _make_add(self, releases):
