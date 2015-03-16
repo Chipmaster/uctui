@@ -1,0 +1,1 @@
+A full featured user collection tool interface for MusicBrainz user collection system.
